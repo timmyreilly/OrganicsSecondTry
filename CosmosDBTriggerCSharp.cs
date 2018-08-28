@@ -13,7 +13,8 @@ namespace Company.Function
             databaseName: "outDatabasePortal",
             collectionName: "MyCollectionPortal",
             ConnectionStringSetting = "organics-db_DOCUMENTDB",
-            LeaseCollectionName = "leases")]IReadOnlyList<Document> input, ILogger log)
+            LeaseCollectionName = "leases",
+            CreateLeaseCollectionIfNotExists = true)]IReadOnlyList<Document> input, ILogger log)
         {
             if (input != null && input.Count > 0)
             {
@@ -21,5 +22,20 @@ namespace Company.Function
                 log.LogInformation("First document Id " + input[0].Id);
             }
         }
+    }
+}
+
+
+[FunctionName("CosmosDbSample")]
+public static async Task Run(
+    [CosmosDBTrigger("ToDoList","Items", ConnectionStringSetting = "CosmosDB")] IReadOnlyList<Document> documents,
+    TraceWriter log,
+    [DocumentDB("ToDoList", "Migration", ConnectionStringSetting = "CosmosDB", CreateIfNotExists = true)] IAsyncCollector<Document> documentsToStore)
+{
+    foreach (var doc in documents)
+    {
+        log.Info($"Processing document with Id {doc.Id}");
+        // work with the document, process or create a new one
+        await documentsToStore.AddAsync(doc);
     }
 }
