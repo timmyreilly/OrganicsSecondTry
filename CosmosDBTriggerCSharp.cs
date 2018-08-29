@@ -26,16 +26,16 @@ namespace Company.Function
 }
 
 
-[FunctionName("CosmosDbSample")]
-public static async Task Run(
-    [CosmosDBTrigger("ToDoList","Items", ConnectionStringSetting = "CosmosDB")] IReadOnlyList<Document> documents,
-    TraceWriter log,
-    [DocumentDB("ToDoList", "Migration", ConnectionStringSetting = "CosmosDB", CreateIfNotExists = true)] IAsyncCollector<Document> documentsToStore)
-{
-    foreach (var doc in documents)
-    {
-        log.Info($"Processing document with Id {doc.Id}");
-        // work with the document, process or create a new one
-        await documentsToStore.AddAsync(doc);
-    }
-}
+// [FunctionName("CosmosDbSample")]
+// public static async Task Run(
+//     [CosmosDBTrigger("ToDoList","Items", ConnectionStringSetting = "CosmosDB")] IReadOnlyList<Document> documents,
+//     TraceWriter log,
+//     [DocumentDB("ToDoList", "Migration", ConnectionStringSetting = "CosmosDB", CreateIfNotExists = true)] IAsyncCollector<Document> documentsToStore)
+// {
+//     foreach (var doc in documents)
+//     {
+//         log.Info($"Processing document with Id {doc.Id}");
+//         // work with the document, process or create a new one
+//         await documentsToStore.AddAsync(doc);
+//     }
+// }

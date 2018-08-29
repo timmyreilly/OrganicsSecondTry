@@ -10,17 +10,25 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
-
+using Microsoft.Azure; //Namespace for CloudConfigurationManager
+using Microsoft.WindowsAzure.Storage; // Namespace for CloudStorageAccount
+using Microsoft.WindowsAzure.Storage.Queue; // Namespace for Queue storage types
+using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Documents.Linq;
+using Microsoft.Azure.WebJobs.Extensions.CosmosDB; 
 
 namespace Company.Function
 {
     public static class CreateRating
     {
         [FunctionName("CreateRating")]
-        public async static IActionResult Run(
+        public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequest req,
             ILogger log,
-             [DocumentDB(databaseName: "ToDoList", collectionName: "Migration", ConnectionStringSetting = "organics-db_DOCUMENTDB", CreateIfNotExists = true)] IAsyncCollector<Document> documentsToStore)
+             [CosmosDB(databaseName: "ToDoList",
+             collectionName: "Migration",
+             ConnectionStringSetting = "organics-db_DOCUMENTDB",
+             CreateIfNotExists = true)] IAsyncCollector<Document> documentsToStore)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -30,7 +38,7 @@ namespace Company.Function
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             name = name ?? data?.name;
 
-            
+
             // var documents = new IReadOnlyList<Document>; 
             // foreach (var doc in documents)
             // {
@@ -38,6 +46,16 @@ namespace Company.Function
             //     // work with the document, process or create a new one
             //     await documentsToStore.AddAsync(doc);
             // }
+
+            object taskDocument = new
+            {
+                name = name,
+                duedate = "123",
+                task = "Do it"
+            };
+
+
+            // await documentsToStore.AddAsync(taskDocument);
 
             return name != null
                 ? (ActionResult)new OkObjectResult($"Hello, {name}")
