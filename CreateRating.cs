@@ -15,10 +15,11 @@ using Microsoft.WindowsAzure.Storage; // Namespace for CloudStorageAccount
 using Microsoft.WindowsAzure.Storage.Queue; // Namespace for Queue storage types
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
-using Microsoft.Azure.WebJobs.Extensions.CosmosDB; 
+using Microsoft.Azure.WebJobs.Extensions.CosmosDB; // install like this: > func extensions install --package Microsoft.Azure.WebJobs.Extensions.CosmosDB --version 3.0.0-beta7
 
 namespace Company.Function
 {
+
     public static class CreateRating
     {
         [FunctionName("CreateRating")]
@@ -61,5 +62,11 @@ namespace Company.Function
                 ? (ActionResult)new OkObjectResult($"Hello, {name}")
                 : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
         }
+    }
+
+    public class Rating
+    {
+        public string Id { get; set; }
+        public string Description { get; set; }
     }
 }

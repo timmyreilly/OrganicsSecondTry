@@ -23,6 +23,21 @@
         "createIfNotExists": true,
         "connection": "organics-db_DOCUMENTDB",
         "direction": "out"
+      },
+      {
+        "name": "toDoItemsIn",
+        "type": "queueTrigger",
+        "direction": "in",
+        "queueName": "todoqueueforwritemulti",
+        "connectionStringSetting": "AzureWebJobsStorage"
+      },
+      {
+        "type": "cosmosDB",
+        "name": "outputDocumentPortal",
+        "databaseName": "outDatabasePortal",
+        "collectionName": "MyCollectionPortal",
+        "connectionStringSetting": "organics-db_DOCUMENTDB",
+        "direction": "out"
       }
     ],
     "disabled": false,
